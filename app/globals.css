@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 14% 10%;
+    --foreground: 0 0% 95%;
+    --card: 240 10% 14%;
+    --card-foreground: 0 0% 95%;
+    --popover: 240 10% 14%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 38 70% 55%;
+    --primary-foreground: 0 0% 10%;
+    --secondary: 240 8% 20%;
+    --secondary-foreground: 0 0% 85%;
+    --muted: 240 8% 18%;
+    --muted-foreground: 0 0% 55%;
+    --accent: 38 70% 55%;
+    --accent-foreground: 0 0% 10%;
+    --destructive: 0 85% 55%;
+    --destructive-foreground: 0 0% 95%;
+    --border: 240 7% 22%;
+    --input: 240 8% 18%;
+    --ring: 38 70% 55%;
+    --chart-1: 45 80% 55%;
+    --chart-2: 160 60% 40%;
+    --chart-3: 200 50% 45%;
+    --chart-4: 30 70% 55%;
+    --chart-5: 350 65% 50%;
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@keyframes bounce-squish {
+  0% { transform: scale(1); }
+  25% { transform: scale(0.7); }
+  50% { transform: scale(1.25); }
+  70% { transform: scale(0.95); }
+  85% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pop-in {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes button-press {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.85); }
+  100% { transform: scale(1); }
+}
