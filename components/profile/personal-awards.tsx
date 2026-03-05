@@ -14,6 +14,37 @@ import {
 } from "@/components/ui/dialog"
 import { Trophy, ChevronRight } from "lucide-react"
 
+function AwardPoster({
+  src,
+  alt,
+  title,
+  className,
+}: {
+  src: string
+  alt: string
+  title: string
+  className?: string
+}) {
+  const [error, setError] = useState(false)
+  if (error) {
+    return (
+      <div
+        className={`flex size-full items-center justify-center bg-muted text-2xl font-bold text-muted-foreground ${className ?? ""}`}
+      >
+        {title.charAt(0)}
+      </div>
+    )
+  }
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={className}
+      onError={() => setError(true)}
+    />
+  )
+}
+
 interface Movie {
   id: string
   title: string
@@ -37,8 +68,8 @@ export function PersonalAwards({ awards }: PersonalAwardsProps) {
   const [selectedAward, setSelectedAward] = useState<AwardCategory | null>(null)
 
   return (
-    <div className="py-4">
-      <div className="mb-3 flex items-center justify-between px-4">
+    <div className="pt-3 pb-1">
+      <div className="mb-2 flex items-center justify-between px-4">
         <div className="flex items-center gap-2">
           <Trophy className="size-4 text-primary" />
           <h2 className="text-sm font-semibold text-foreground">My Academy Award</h2>
@@ -62,9 +93,10 @@ export function PersonalAwards({ awards }: PersonalAwardsProps) {
                 className="group relative w-full overflow-hidden rounded-xl border border-border/50 bg-card transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5"
               >
                 <div className="aspect-[2/3] overflow-hidden">
-                  <img
+                  <AwardPoster
                     src={award.winner.poster}
                     alt={award.winner.title}
+                    title={award.winner.title}
                     className="size-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
@@ -117,9 +149,10 @@ export function PersonalAwards({ awards }: PersonalAwardsProps) {
                 >
                   {index + 1}
                 </span>
-                <img
+                <AwardPoster
                   src={movie.poster}
                   alt={movie.title}
+                  title={movie.title}
                   className="size-12 rounded object-cover"
                 />
                 <div className="min-w-0 flex-1">

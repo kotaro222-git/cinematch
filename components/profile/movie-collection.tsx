@@ -5,6 +5,28 @@ import { LayoutGrid, Heart, Eye } from "lucide-react"
 import { cn } from "@/lib/utils"
 import Image from "next/image"
 
+function MoviePoster({ src, alt, title }: { src: string; alt: string; title: string }) {
+  const [error, setError] = useState(false)
+  if (error) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-muted text-4xl font-bold text-muted-foreground">
+        {title.charAt(0)}
+      </div>
+    )
+  }
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      sizes="(max-width: 768px) 33vw, 200px"
+      className="object-cover transition-transform duration-300 group-hover:scale-105"
+      onError={() => setError(true)}
+      unoptimized
+    />
+  )
+}
+
 interface Movie {
   id: string
   title: string
@@ -24,11 +46,11 @@ export function MovieCollection({ watched, watchlist }: MovieCollectionProps) {
 
   return (
     <div className="flex-1 px-4">
-      <h2 className="mb-4 text-sm font-medium tracking-wider text-muted-foreground">
+      <h2 className="mb-2 text-sm font-medium tracking-wider text-muted-foreground">
         COLLECTION
       </h2>
 
-      <div className="mb-4 flex overflow-hidden rounded-lg border border-border bg-card/50">
+      <div className="mb-3 flex overflow-hidden rounded-lg border border-border bg-card/50">
         <button
           type="button"
           onClick={() => setActiveTab("watched")}
@@ -40,7 +62,7 @@ export function MovieCollection({ watched, watchlist }: MovieCollectionProps) {
           )}
         >
           <LayoutGrid className="h-4 w-4" />
-          Watched
+          鑑賞済み
         </button>
         <button
           type="button"
@@ -60,12 +82,7 @@ export function MovieCollection({ watched, watchlist }: MovieCollectionProps) {
       <div className="grid grid-cols-3 gap-2">
         {displayMovies.map((movie) => (
           <div key={movie.id} className="group relative aspect-[3/4] cursor-pointer overflow-hidden rounded-sm">
-            <Image
-              src={movie.image}
-              alt={movie.title}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-            />
+            <MoviePoster src={movie.image} alt={movie.title} title={movie.title} />
 
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-2 pt-8">
               <p className="text-xs font-medium text-white">{movie.title}</p>

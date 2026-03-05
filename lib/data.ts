@@ -23,74 +23,76 @@ export interface Conversation {
   movieThumbnail: string
 }
 
+const TMDB = (path: string) => `https://image.tmdb.org/t/p/w500/${path}`
+
 export const movies: Movie[] = [
   {
     id: "1",
-    title: "Blade Runner 2049",
-    image: "https://images.pexels.com/photos/3617500/pexels-photo-3617500.jpeg?auto=compress&cs=tinysrgb&w=800",
-    tagline: "The key to the future is finally unearthed.",
-    year: 2017,
+    title: "Spirited Away",
+    image: TMDB("39wmItIWsg5sZMyRUHLkWBcuVCM.jpg"),
+    tagline: "Miyazaki's masterpiece. Pure magic.",
+    year: 2001,
   },
   {
     id: "2",
     title: "Interstellar",
-    image: "https://images.pexels.com/photos/1252869/pexels-photo-1252869.jpeg?auto=compress&cs=tinysrgb&w=800",
+    image: TMDB("gEU2QniE6E77NI6lCU6MxlNBvIx.jpg"),
     tagline: "Mankind was born on Earth. It was never meant to die here.",
     year: 2014,
   },
   {
     id: "3",
     title: "Parasite",
-    image: "https://images.pexels.com/photos/2662116/pexels-photo-2662116.jpeg?auto=compress&cs=tinysrgb&w=800",
+    image: TMDB("7IiTTgloJzvGI1TAYymCfbfl3vT.jpg"),
     tagline: "Act like you own the place.",
     year: 2019,
   },
   {
     id: "4",
     title: "La La Land",
-    image: "https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&cs=tinysrgb&w=800",
+    image: TMDB("uDO8zWDhfWwoFdKS4fzkUJt0Rf0.jpg"),
     tagline: "Here's to the fools who dream.",
     year: 2016,
   },
   {
     id: "5",
     title: "The Grand Budapest Hotel",
-    image: "https://images.pexels.com/photos/3075993/pexels-photo-3075993.jpeg?auto=compress&cs=tinysrgb&w=800",
+    image: TMDB("eWdyYQreja6jGC2x8XpkRqMb46t.jpg"),
     tagline: "A perfect holiday without leaving home.",
     year: 2014,
   },
   {
     id: "6",
     title: "Drive",
-    image: "https://images.pexels.com/photos/1366919/pexels-photo-1366919.jpeg?auto=compress&cs=tinysrgb&w=800",
+    image: TMDB("nu7CI7VIDgeMui8F5eW2YOl3khs.jpg"),
     tagline: "There are no clean getaways.",
     year: 2011,
   },
   {
     id: "7",
     title: "Arrival",
-    image: "https://images.pexels.com/photos/355952/pexels-photo-355952.jpeg?auto=compress&cs=tinysrgb&w=800",
+    image: TMDB("hLudzvGfpi6JlwUnsNhXwKKg4j.jpg"),
     tagline: "Why are they here?",
     year: 2016,
   },
   {
     id: "8",
     title: "Moonlight",
-    image: "https://images.pexels.com/photos/1229042/pexels-photo-1229042.jpeg?auto=compress&cs=tinysrgb&w=800",
+    image: TMDB("qAwFbsz0FV1b1TFUJz4rWb8fcbJ.jpg"),
     tagline: "This is the story of a lifetime.",
     year: 2016,
   },
   {
     id: "9",
     title: "Hereditary",
-    image: "https://images.pexels.com/photos/2387793/pexels-photo-2387793.jpeg?auto=compress&cs=tinysrgb&w=800",
+    image: TMDB("sOuF9KMxI2j2GwZVHPqhTDqsn1d.jpg"),
     tagline: "Every family tree hides a secret.",
     year: 2018,
   },
   {
     id: "10",
     title: "Dune",
-    image: "https://images.pexels.com/photos/847402/pexels-photo-847402.jpeg?auto=compress&cs=tinysrgb&w=800",
+    image: TMDB("d5NXSklXo0qyIYkgV94XAgMIckC.jpg"),
     tagline: "It begins.",
     year: 2021,
   },
@@ -109,7 +111,7 @@ export const conversations: Conversation[] = [
     lastMessage: "Have you seen Blade Runner 2049?",
     timestamp: "2m ago",
     isGift: false,
-    movieThumbnail: "https://images.pexels.com/photos/3617500/pexels-photo-3617500.jpeg?auto=compress&cs=tinysrgb&w=200",
+    movieThumbnail: TMDB("gajva2L0rPYkEWjzgFlBXCAVBE5.jpg"),
   },
   {
     id: "2",
@@ -123,7 +125,7 @@ export const conversations: Conversation[] = [
     lastMessage: "La La Land is a masterpiece!",
     timestamp: "15m ago",
     isGift: true,
-    movieThumbnail: "https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&cs=tinysrgb&w=200",
+    movieThumbnail: TMDB("uDO8zWDhfWwoFdKS4fzkUJt0Rf0.jpg"),
   },
   {
     id: "3",
@@ -137,7 +139,7 @@ export const conversations: Conversation[] = [
     lastMessage: "That twist ending though...",
     timestamp: "1h ago",
     isGift: false,
-    movieThumbnail: "https://images.pexels.com/photos/2662116/pexels-photo-2662116.jpeg?auto=compress&cs=tinysrgb&w=200",
+    movieThumbnail: TMDB("7IiTTgloJzvGI1TAYymCfbfl3vT.jpg"),
   },
   {
     id: "4",
@@ -151,7 +153,7 @@ export const conversations: Conversation[] = [
     lastMessage: "Check out this indie gem I found",
     timestamp: "3h ago",
     isGift: false,
-    movieThumbnail: "https://images.pexels.com/photos/1252869/pexels-photo-1252869.jpeg?auto=compress&cs=tinysrgb&w=200",
+    movieThumbnail: TMDB("gEU2QniE6E77NI6lCU6MxlNBvIx.jpg"),
   },
   {
     id: "5",
@@ -165,6 +167,6 @@ export const conversations: Conversation[] = [
     lastMessage: "This documentary changed my perspective",
     timestamp: "5h ago",
     isGift: true,
-    movieThumbnail: "https://images.pexels.com/photos/3075993/pexels-photo-3075993.jpeg?auto=compress&cs=tinysrgb&w=200",
+    movieThumbnail: TMDB("eWdyYQreja6jGC2x8XpkRqMb46t.jpg"),
   },
 ]

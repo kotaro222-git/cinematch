@@ -1,296 +1,365 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
-import * as THREE from "three"
+import React, { useState, useEffect } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import {
+  LucideChevronLeft,
+  LucideInfo,
+  LucideClapperboard,
+  LucideStar,
+} from "lucide-react"
 
-const imageUrls = [
-  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1544005313945-3f2917c472ef?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1534528741775-5658abf45f1d?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1519345182560-3f2988babdf9?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1517841905240-b1c1722653e1?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1463453091185-61582044d556?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1521119989659-a83eee488004?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1552058544-f2b08422138a?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1496440737103-cd596325d314?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1504257432389-52343af06ae3?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1485875437517-e32da4c3d028?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1514315384763-ba401779410f?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1487412720507-e32da4c3d028?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1504199367641-ebb94b2b6a24?w=400&h=400&fit=crop&crop=face",
-  "https://images.unsplash.com/photo-1506794778202-cad84cf4ff4e?w=400&h=400&fit=crop&crop=face",
+// Mock data for person-to-person matching
+const AVATAR_DATA = [
+  {
+    id: 1,
+    name: "Haruki",
+    img: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&fit=crop&crop=face",
+    match: 98,
+    aura: "Cinephile / Sci-Fi Enthusiast",
+  },
+  {
+    id: 2,
+    name: "Sakura",
+    img: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&fit=crop&crop=face",
+    match: 94,
+    aura: "Romantic Comedy Lover",
+  },
+  {
+    id: 3,
+    name: "Kenji",
+    img: "https://images.pexels.com/photos/1516680/pexels-photo-1516680.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&fit=crop&crop=face",
+    match: 92,
+    aura: "Horror Aficionado",
+  },
+  {
+    id: 4,
+    name: "Mika",
+    img: "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&fit=crop&crop=face",
+    match: 89,
+    aura: "Indie Film Curator",
+  },
+  {
+    id: 5,
+    name: "Ren",
+    img: "https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&fit=crop&crop=face",
+    match: 87,
+    aura: "Documentary Enthusiast",
+  },
+  {
+    id: 6,
+    name: "Yuki",
+    img: "https://images.pexels.com/photos/1484794/pexels-photo-1484794.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&fit=crop&crop=face",
+    match: 85,
+    aura: "Noir & Thriller Fan",
+  },
+  {
+    id: 7,
+    name: "Hiro",
+    img: "https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&fit=crop&crop=face",
+    match: 82,
+    aura: "Action Blockbuster Lover",
+  },
+  {
+    id: 8,
+    name: "Aoi",
+    img: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&fit=crop&crop=face",
+    match: 80,
+    aura: "Animation & Studio Ghibli",
+  },
+  {
+    id: 9,
+    name: "Takumi",
+    img: "https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&fit=crop&crop=face",
+    match: 78,
+    aura: "Classic Cinema Buff",
+  },
+  {
+    id: 10,
+    name: "Nana",
+    img: "https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&fit=crop&crop=face",
+    match: 75,
+    aura: "International Film Fan",
+  },
 ]
 
-export function RadarScreen() {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const [loading, setLoading] = useState(true)
+const InkBloomBackground = () => {
+  return (
+    <div className="absolute inset-0 overflow-hidden bg-black -z-10">
+      {/* Indigo Cloud */}
+      <motion.div
+        animate={{
+          scale: [1, 1.2, 1],
+          x: [-20, 20, -20],
+          y: [-20, 30, -20],
+          opacity: [0.3, 0.5, 0.3],
+        }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-1/4 -left-1/4 w-[80%] h-[80%] rounded-full bg-indigo-900/30 blur-[120px]"
+      />
+      {/* Emerald Cloud */}
+      <motion.div
+        animate={{
+          scale: [1.2, 1, 1.2],
+          x: [30, -30, 30],
+          y: [40, -40, 40],
+          opacity: [0.2, 0.4, 0.2],
+        }}
+        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute -bottom-1/4 -right-1/4 w-[70%] h-[70%] rounded-full bg-emerald-900/20 blur-[100px]"
+      />
+      {/* Burgundy Cloud */}
+      <motion.div
+        animate={{
+          scale: [1, 1.1, 1],
+          x: [0, 50, 0],
+          opacity: [0.3, 0.6, 0.3],
+        }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] rounded-full bg-rose-950/25 blur-[140px]"
+      />
+    </div>
+  )
+}
+
+type AvatarData = (typeof AVATAR_DATA)[number]
+
+const OrbitingAvatar = ({
+  avatar,
+  index,
+  total,
+  onFocus,
+  isFocused,
+}: {
+  avatar: AvatarData
+  index: number
+  total: number
+  onFocus: (avatar: AvatarData) => void
+  isFocused: boolean
+}) => {
+  const angleOffset = (index / total) * Math.PI * 2
+  const [rotation, setRotation] = useState(0)
 
   useEffect(() => {
-    if (!containerRef.current) return
-
-    const container = containerRef.current
-    const rect = container.getBoundingClientRect()
-    const width = rect.width || container.clientWidth || 400
-    const height = rect.height || container.clientHeight || 700
-
-    const radius = 5
-    const cardCount = 30
-    const rows = 3
-    const friction = 0.96
-    const rowSpacing = 1.6
-
-    let isDragging = false
-    let previousMouseX = 0
-    let rotationVelocity = 0
-
-    const scene = new THREE.Scene()
-    scene.fog = new THREE.FogExp2(0x000000, 0.05)
-
-    const camera = new THREE.PerspectiveCamera(70, width / height, 0.1, 1000)
-    camera.position.z = 11
-    camera.position.y = 0
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
-    renderer.setSize(width, height)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    container.appendChild(renderer.domElement)
-
-    const cylinderGroup = new THREE.Group()
-    scene.add(cylinderGroup)
-
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.9)
-    scene.add(ambientLight)
-
-    const pointLight = new THREE.PointLight(0xffffff, 1)
-    pointLight.position.set(0, 10, 10)
-    scene.add(pointLight)
-
-    const baseCardSize = 1.5
-    const cardsPerRow = cardCount / rows
-
-    const loadImageElement = (url: string): Promise<HTMLImageElement> => {
-      return new Promise((resolve, reject) => {
-        const img = new window.Image()
-        img.crossOrigin = "anonymous"
-        img.onload = () => resolve(img)
-        img.onerror = () => reject(new Error("load failed"))
-        img.src = url
-      })
-    }
-
-    const createMatchOverlay = (loadedImg: HTMLImageElement | null, matchPercent: number, fallbackColor: string) => {
-      const size = 512
-      const canvas = document.createElement("canvas")
-      canvas.width = size
-      canvas.height = size
-      const ctx = canvas.getContext("2d")!
-
-      if (loadedImg) {
-        ctx.drawImage(loadedImg, 0, 0, size, size)
-      } else {
-        ctx.fillStyle = fallbackColor
-        ctx.fillRect(0, 0, size, size)
-      }
-
-      const gradient = ctx.createLinearGradient(0, size * 0.6, 0, size)
-      gradient.addColorStop(0, "rgba(0,0,0,0)")
-      gradient.addColorStop(0.5, "rgba(0,0,0,0.5)")
-      gradient.addColorStop(1, "rgba(0,0,0,0.85)")
-      ctx.fillStyle = gradient
-      ctx.fillRect(0, size * 0.6, size, size * 0.4)
-
-      ctx.save()
-      ctx.translate(size, 0)
-      ctx.scale(-1, 1)
-
-      ctx.textAlign = "center"
-      ctx.textBaseline = "middle"
-
-      const percentStr = `${matchPercent}%`
-      ctx.font = "bold 72px -apple-system, BlinkMacSystemFont, sans-serif"
-      ctx.fillStyle = matchPercent >= 80 ? "#4ade80" : matchPercent >= 60 ? "#facc15" : "#f87171"
-      ctx.fillText(percentStr, size / 2, size * 0.82)
-
-      ctx.font = "500 28px -apple-system, BlinkMacSystemFont, sans-serif"
-      ctx.fillStyle = "rgba(255,255,255,0.7)"
-      ctx.fillText("Match", size / 2, size * 0.93)
-
-      ctx.restore()
-
-      const tex = new THREE.CanvasTexture(canvas)
-      tex.needsUpdate = true
-      return tex
-    }
-
-    const matchPercentages: number[] = []
-    for (let i = 0; i < cardCount; i++) {
-      matchPercentages.push(Math.floor(Math.random() * 40 + 30) + Math.floor(Math.random() * 30))
-    }
-
-    const cardGeometry = new THREE.PlaneGeometry(baseCardSize, baseCardSize)
-
-    for (let i = 0; i < cardCount; i++) {
-      const rowIdx = Math.floor(i / cardsPerRow)
-      const colIdx = i % cardsPerRow
-
-      const offsetAngle = (rowIdx % 2) * (Math.PI / cardsPerRow)
-      const angle = (colIdx / cardsPerRow) * Math.PI * 2 + offsetAngle
-
-      const url = imageUrls[i % imageUrls.length]
-
-      const material = new THREE.MeshBasicMaterial({
-        side: THREE.DoubleSide,
-        transparent: true,
-        color: 0x333333,
-      })
-
-      const card = new THREE.Mesh(cardGeometry, material)
-
-      const x = Math.sin(angle) * radius
-      const z = Math.cos(angle) * radius
-      const y = (rowIdx - Math.floor(rows / 2)) * rowSpacing
-
-      card.position.set(x, y, z)
-      card.lookAt(0, y, 0)
-
-      card.userData = {
-        baseY: y,
-        offset: Math.random() * Math.PI * 2,
-        floatSpeed: 0.005 + Math.random() * 0.01,
-        matchPercent: matchPercentages[i],
-      }
-
-      cylinderGroup.add(card)
-
-      const matchPct = matchPercentages[i]
-      loadImageElement(url)
-        .then((img) => {
-          const overlayTex = createMatchOverlay(img, matchPct, "#444")
-          material.map = overlayTex
-          material.color.set(0xffffff)
-          material.needsUpdate = true
-        })
-        .catch(() => {
-          const overlayTex = createMatchOverlay(null, matchPct, "#444")
-          material.map = overlayTex
-          material.color.set(0xffffff)
-          material.needsUpdate = true
-        })
-    }
-
-    const onPointerDown = (e: MouseEvent | TouchEvent) => {
-      isDragging = true
-      const x = "touches" in e ? e.touches[0].clientX : e.clientX
-      previousMouseX = x
-    }
-
-    const onPointerMove = (e: MouseEvent | TouchEvent) => {
-      if (!isDragging) return
-      if ("touches" in e) e.preventDefault()
-
-      const x = "touches" in e ? e.touches[0].clientX : e.clientX
-      const deltaX = x - previousMouseX
-
-      rotationVelocity += deltaX * 0.0004
-      previousMouseX = x
-    }
-
-    const onPointerUp = () => {
-      isDragging = false
-    }
-
-    const onResize = () => {
-      const newRect = container.getBoundingClientRect()
-      const w = newRect.width || 400
-      const h = newRect.height || 700
-      camera.aspect = w / h
-      camera.updateProjectionMatrix()
-      renderer.setSize(w, h)
-    }
-
-    container.addEventListener("mousedown", onPointerDown)
-    container.addEventListener("mousemove", onPointerMove)
-    window.addEventListener("mouseup", onPointerUp)
-
-    container.addEventListener("touchstart", onPointerDown, { passive: false })
-    container.addEventListener("touchmove", onPointerMove, { passive: false })
-    window.addEventListener("touchend", onPointerUp)
-
-    window.addEventListener("resize", onResize)
-
-    let animationId: number
-
+    let frame: number
     const animate = () => {
-      animationId = requestAnimationFrame(animate)
-
-      cylinderGroup.rotation.y += rotationVelocity
-
-      if (!isDragging) {
-        rotationVelocity *= friction
-      }
-
-      const time = Date.now() * 0.001
-      cylinderGroup.children.forEach((card) => {
-        if (card.userData.baseY !== undefined) {
-          card.position.y = card.userData.baseY + Math.sin(time * 2 + card.userData.offset) * 0.05
-        }
-      })
-
-      renderer.render(scene, camera)
+      setRotation((prev) => prev + 0.002)
+      frame = requestAnimationFrame(animate)
     }
-
     animate()
+    return () => cancelAnimationFrame(frame)
+  }, [])
 
-    setTimeout(() => {
-      setLoading(false)
-    }, 500)
+  const currentAngle = angleOffset + rotation
+  const radiusX = 140
 
-    return () => {
-      cancelAnimationFrame(animationId)
+  const x = Math.cos(currentAngle) * radiusX
+  const z = Math.sin(currentAngle)
+  const y =
+    Math.sin(currentAngle * 0.5) * 40 + Math.sin(currentAngle) * 60
 
-      container.removeEventListener("mousedown", onPointerDown)
-      container.removeEventListener("mousemove", onPointerMove)
-      window.removeEventListener("mouseup", onPointerUp)
+  const scale = 0.6 + (z + 1) * 0.25
+  const opacity = 0.4 + (z + 1) * 0.3
+  const zIndex = Math.round((z + 1) * 100)
 
-      container.removeEventListener("touchstart", onPointerDown)
-      container.removeEventListener("touchmove", onPointerMove)
-      window.removeEventListener("touchend", onPointerUp)
+  return (
+    <div
+      className="absolute top-1/2 left-1/2 transition-all duration-300 ease-out"
+      style={{
+        transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(${isFocused ? 1.4 : scale})`,
+        zIndex: isFocused ? 200 : zIndex,
+        opacity: isFocused ? 1 : opacity,
+      }}
+      onClick={() => onFocus(avatar)}
+    >
+      {/* Trail Line */}
+      <svg className="absolute top-1/2 left-1/2 -z-10 w-[400px] h-[400px] -translate-x-1/2 -translate-y-1/2 pointer-events-none overflow-visible">
+        <motion.line
+          x1="200"
+          y1="200"
+          x2={200 - x}
+          y2={200 - y}
+          stroke="white"
+          strokeWidth="0.5"
+          strokeOpacity={0.15}
+          initial={{ pathLength: 0 }}
+          animate={{ pathLength: 1 }}
+          transition={{ duration: 2 }}
+        />
+      </svg>
 
-      window.removeEventListener("resize", onResize)
+      <div className="relative group cursor-pointer">
+        <div
+          className={`
+          w-16 h-16 rounded-full border border-white/10 overflow-hidden ring-offset-2 ring-offset-black
+          ${isFocused ? "ring-2 ring-white/40" : "ring-0"}
+          transition-all duration-500
+        `}
+        >
+          <img
+            src={avatar.img}
+            alt={avatar.name}
+            className="w-full h-full object-cover object-top group-hover:brightness-110 transition-all"
+          />
+        </div>
 
-      renderer.dispose()
-      if (container.contains(renderer.domElement)) {
-        container.removeChild(renderer.domElement)
-      }
-    }
+        {/* Match Badge */}
+        <AnimatePresence>
+          {isFocused && (
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.8 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 5, scale: 0.8 }}
+              className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap"
+            >
+              <div className="px-2 py-0.5 bg-white text-black text-[10px] font-bold tracking-tighter rounded-full flex items-center gap-1 shadow-lg shadow-white/10 uppercase">
+                <LucideStar size={8} fill="currentColor" />
+                {avatar.match}% Match
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  )
+}
+
+export function RadarScreen() {
+  const [focusedAvatar, setFocusedAvatar] = useState<AvatarData | null>(null)
+  const [searching, setSearching] = useState(true)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setSearching(false), 2000)
+    return () => clearTimeout(timer)
   }, [])
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-black">
-      {loading && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black text-sm text-white/50 transition-opacity duration-500">
-          Scanning for matches...
+    <div className="relative w-full h-full min-h-0 bg-black text-white font-sans overflow-hidden flex flex-col">
+      <InkBloomBackground />
+
+      {/* Header */}
+      <header className="relative z-50 flex items-center justify-between p-6 pt-12">
+        <button
+          type="button"
+          className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 border border-white/10 backdrop-blur-md"
+        >
+          <LucideChevronLeft size={20} />
+        </button>
+        <div className="text-center">
+          <h1 className="text-xs font-bold tracking-[0.3em] uppercase opacity-50">
+            Discovery
+          </h1>
+          <p className="text-lg font-light tracking-tight">CineMatch</p>
         </div>
-      )}
-      <div ref={containerRef} className="h-full w-full touch-none" />
-      <div className="pointer-events-none absolute bottom-6 w-full text-center text-xs text-white/40 drop-shadow-md">
-        Swipe to explore matches
-      </div>
+        <button
+          type="button"
+          className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 border border-white/10 backdrop-blur-md"
+        >
+          <LucideInfo size={18} />
+        </button>
+      </header>
+
+      {/* Main Experience */}
+      <main className="flex-1 relative">
+        {/* Center Anchor */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+          <motion.div
+            animate={
+              searching
+                ? {
+                    scale: [1, 1.1, 1],
+                    opacity: [0.5, 1, 0.5],
+                  }
+                : {}
+            }
+            transition={{ duration: 2, repeat: Infinity }}
+            className="w-24 h-24 rounded-full border border-white/20 p-1 flex items-center justify-center relative"
+          >
+            <div className="absolute inset-0 rounded-full border border-white/5 animate-ping opacity-20" />
+            <div className="w-full h-full rounded-full overflow-hidden border border-white/40">
+              <img
+                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&h=200&fit=crop"
+                alt="Your Profile"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </motion.div>
+
+          <div className="mt-4 text-center">
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-[10px] font-medium uppercase tracking-[0.2em] text-indigo-300"
+            >
+              {searching ? "Finding Cinephile Matches..." : "Matches Found"}
+            </motion.p>
+          </div>
+        </div>
+
+        {/* Orbiting Elements */}
+        {!searching &&
+          AVATAR_DATA.map((avatar, idx) => (
+            <OrbitingAvatar
+              key={avatar.id}
+              avatar={avatar}
+              index={idx}
+              total={AVATAR_DATA.length}
+              isFocused={focusedAvatar?.id === avatar.id}
+              onFocus={setFocusedAvatar}
+            />
+          ))}
+      </main>
+
+      {/* Footer Controls */}
+      <footer className="relative z-50 p-8 pb-12 flex flex-col gap-6 items-center">
+        <AnimatePresence mode="wait">
+          {focusedAvatar ? (
+            <motion.div
+              key="details"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              className="text-center"
+            >
+              <h2 className="text-2xl font-light tracking-tight mb-1">
+                {focusedAvatar.name}
+              </h2>
+              <p className="text-[10px] uppercase tracking-widest opacity-60">
+                {focusedAvatar.aura}
+              </p>
+            </motion.div>
+          ) : (
+            <motion.p
+              key="hint"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.4 }}
+              className="text-[11px] uppercase tracking-[0.3em] font-medium"
+            >
+              Tap a person to view details
+            </motion.p>
+          )}
+        </AnimatePresence>
+
+        <div className="flex items-center gap-4 w-full max-w-xs">
+          <button
+            type="button"
+            className="flex-1 py-4 rounded-2xl bg-white text-black font-bold text-xs uppercase tracking-widest hover:bg-white/90 transition-colors"
+          >
+            Start Sync
+          </button>
+          <button
+            type="button"
+            className="w-14 h-14 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md"
+          >
+            <LucideClapperboard size={20} />
+          </button>
+        </div>
+      </footer>
+
+      {/* Vignette Overlays */}
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_0%,black_90%)] opacity-60" />
+      <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-black to-transparent" />
+      <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-black to-transparent" />
     </div>
   )
 }
